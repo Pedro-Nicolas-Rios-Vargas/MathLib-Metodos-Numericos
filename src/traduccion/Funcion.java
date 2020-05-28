@@ -79,7 +79,8 @@ public class Funcion {
         }else if(operador == 47){   // /
             return res1 / res2;
         }else if(operador == 94){   //^
-            return (double) MathLib.potencia(ArbolaFuncion(aux.derecha, x), (int) ArbolaFuncion(aux.izquierda, x));
+        	return (double) MathLib.potencia(res1, (int) res2);
+            //return (double) MathLib.potencia(ArbolaFuncion(aux.izquierda, x), (int) ArbolaFuncion(aux.derecha, x));
         }
         
         return 0;

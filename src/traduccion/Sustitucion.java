@@ -28,10 +28,10 @@ public class Sustitucion {
             token = st.nextToken();
             
             if(token.length() == 1){ 
-                /*  Se verifica si el token obtenido es de tamaÃ±o 1, esto es para
+                /*  Se verifica si el token obtenido es de tamaño 1, esto es para
                     reducir los casos ya que solo puede haber 4 tipos de caracteres
-                    con tamaÃ±o 1 en la ecuacion, "operadores, numero menor a 10, variables, parentesis"
-                    por lo tanto si el token tiene tamaÃ±o uno se procede a verificar el valor de
+                    con tamaño 1 en la ecuacion, "operadores, numero menor a 10, variables, parentesis"
+                    por lo tanto si el token tiene tamaño uno se procede a verificar el valor de
                     ese caracter:
                 
                 */
@@ -53,9 +53,9 @@ public class Sustitucion {
                     if(tokenAnterior != null){
                         /*
                             Para verificar si el tokenAnterior es un operador, parentesis, un numero < 10 o
-                            una variable se verifica su tamaÃ±o.
+                            una variable se verifica su tamaño.
                         
-                            Si el token anterior resulta ser un operador o un parentesis se procede a aÃ±adir
+                            Si el token anterior resulta ser un operador o un parentesis se procede a añadir
                             el token actual a un string llamado "modulo" el cual almacenara el operador y
                             si el token siguiente resulta ser un numero se guardara en el string "modulo"
                             y se procedera a guardar este string en una cola y sustituir el valor por un simbolo
@@ -64,7 +64,8 @@ public class Sustitucion {
                             para hacer negativa una operacion.
                         */
                         if(tokenAnterior.length() == 1){
-                            if(Operadores.esUnOperador(tokenAnterior.charAt(0)) || Parentesis.esParentesisDeApertura(tokenAnterior.charAt(0))){
+                            if(Operadores.esUnOperador(tokenAnterior.charAt(0)) ||
+                            		Parentesis.esParentesisDeApertura(tokenAnterior.charAt(0))){
                                 modulo += token;
                             }else{
                                 sb.append(token);

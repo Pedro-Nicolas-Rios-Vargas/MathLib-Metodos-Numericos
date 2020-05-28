@@ -6,7 +6,10 @@ import excepciones.EcuacionException;
 import excepciones.OperadorException;
 
 import elementos.*;
-
+/**
+ * La clase Ecuacion se encarga de verificar que la ecuacion haya sido introducida correctamente
+ * 
+ * */
 
 public class Ecuacion {
     
@@ -116,9 +119,4 @@ public class Ecuacion {
     private void validacionConstantes(char sucesor) throws EcuacionException{
         if(Constantes.esValidaLaConstante(sucesor));
     }
-    
-    
-    
-    
-    
 }
