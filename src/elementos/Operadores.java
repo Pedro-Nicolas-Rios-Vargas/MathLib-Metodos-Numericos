@@ -15,20 +15,35 @@ import excepciones.*;
 public class Operadores {
     // * = 42 ; + = 43 ; - = 45 ; / = 47 ; ^ = 94
     
-    public static boolean esValidoElOperador(char sucesor) throws EcuacionException{
-        
-        if(sucesor > 0){
-            if(!(Parentesis.esParentesisDeApertura(sucesor) ||
-                    Variables.esUnaVariable(sucesor) ||
-                    Constantes.esUnaConstante(sucesor))){
-                if(esUnOperador(sucesor) && !(jerarquia(sucesor) == 1))
-                    throw new OperadorException("No se pueden realizar operaciones entre operadores");
-                else if(Parentesis.esParentesisDeCierre(sucesor))
-                    throw new ParentesisException("Parentesis de cierre operacion no valida");
-            }
+    public static boolean esValidoElOperador(String strAntecesor, char actual) throws EcuacionException{
+        char antecesor;
+    	if(strAntecesor.length() == 1) {
+        	antecesor = strAntecesor.charAt(0); 
+	        if(antecesor > 0){
+	            if(!((Parentesis.esParentesisDeApertura(antecesor) && jerarquia(actual) == 1) ||
+	            		Parentesis.esParentesisDeCierre(antecesor) ||
+	                    Variables.esUnaVariable(antecesor) ||
+	                    Constantes.esUnaConstante(antecesor) ||
+	                    (ExpresionMatematica.esUnaExprecionMatematica(strAntecesor) && jerarquia(actual) == 3))){
+	                if(!(esUnOperador(antecesor) && jerarquia(antecesor) == 2 && jerarquia(actual) == 1))
+	                    throw new OperadorException("No se pueden realizar operaciones entre operadores");
+	                /*
+	                else if(Parentesis.esParentesisDeCierre(antecesor))
+	                    throw new ParentesisException("Parentesis de cierre operacion no valida");
+                    */
+                	/*
+	                else if(ExpresionMatematica.esUnaExprecionMatematica(strAntecesor)) //por lo de euler "e"
+	                	throw new OperadorException("Expresion matematica mal posicionada");
+	                	*/
+	            }
+	        }
+        }else {
+        	if(ExpresionMatematica.esUnaExprecionMatematica(strAntecesor))
+        		throw new OperadorException("Expresion matematica mal posicionada");
         }
         return true;
     }
+    
     
     public static boolean esUnOperador(char caracter){
         // * = 42 ; + = 43 ; - = 45 ; / = 47 ; ^ = 94  
@@ -42,7 +57,7 @@ public class Operadores {
         int jerarquiaEntrante = jerarquia(operadorEntrante);
         int jerarquiaAlmacenado = jerarquia(operadorAlmacenado);
         
-        if(jerarquiaEntrante <= jerarquiaAlmacenado)
+        if(jerarquiaEntrante < jerarquiaAlmacenado)
             return true;
         
         return false;

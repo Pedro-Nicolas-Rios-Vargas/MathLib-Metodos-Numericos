@@ -8,10 +8,8 @@ import java.util.StringTokenizer;
 public class Sustitucion {
     private StringTokenizer st;
     private StringBuilder sb;
-    private String ecuacion;
     
     public Sustitucion(String ecuacion){
-        this.ecuacion = ecuacion;
         st = new StringTokenizer(ecuacion, "+,-,*,/,^, (,)", true);
         sb = new StringBuilder(ecuacion.length());
     }

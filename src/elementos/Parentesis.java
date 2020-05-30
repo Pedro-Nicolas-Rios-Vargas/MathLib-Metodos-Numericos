@@ -24,37 +24,53 @@ public class Parentesis {
         return caracter == 41;
     }
     
-    public static boolean esValidoElParentesisDeApertura(char sucesor) throws EcuacionException{
-        if(sucesor > 0){
-            if(!(esParentesisDeApertura(sucesor) || Variables.esUnaVariable(sucesor) || 
-                    Constantes.esUnaConstante(sucesor))){
-                
-                if(Operadores.esUnOperador(sucesor)){
-                    //AQUI ESPECIFICO SI EL CARACTER ES UN + O UN - NO LO TOME EN CUENTA YA QUE DEBE AFECTAR A UN OPERANDO
-                    if(!(Operadores.jerarquia(sucesor) == 1))
-                        throw new OperadorException("Existe un operador realizando una accion invalida");
-                }else{
-                    throw new EcuacionException("Caracter invalido");
-                }
-            }
-        }
+    public static boolean esValidoElParentesisDeApertura(String strAntecesor) throws EcuacionException{
+    	char antecesor;
+    	if(strAntecesor.length() == 1) {
+    		antecesor = strAntecesor.charAt(0);
+	        if(antecesor > 0){
+	            if(!(esParentesisDeApertura(antecesor) || Operadores.esUnOperador(antecesor))){
+	                
+	                if(Variables.esUnaVariable(antecesor) || 
+		                    Constantes.esUnaConstante(antecesor)){
+	                	/*
+	                    //AQUI ESPECIFICO SI EL CARACTER ES UN + O UN - NO LO TOME EN CUENTA YA QUE DEBE AFECTAR A UN OPERANDO
+	                    if(!(Operadores.jerarquia(antecesor) == 1))
+	                        throw new OperadorException("Existe un operador realizando una accion invalida");
+                        */
+	                	throw new EcuacionException("Variable o constante mal posicionada");
+	                }else{
+	                    throw new EcuacionException("Caracter invalido");
+	                }
+	            }
+	        }
+    	}else {
+    		if(!ExpresionMatematica.esUnaExprecionMatematica(strAntecesor))
+    			throw new EcuacionException("Caracter no valido");
+    	}
         return true;
     }
     
 
     
-    public static boolean esValidoElParentesisDeCierre(char sucesor) throws EcuacionException{
-                
-        if(sucesor > 0){
-            if(!(esParentesisDeCierre(sucesor) || Operadores.esUnOperador(sucesor))){
-                if(Variables.esUnaVariable(sucesor)){
-                    throw new VariableException("Existe una variable realizando una operacion invalida");
-                }else if(Constantes.esUnaConstante(sucesor)){
-                    throw new ConstanteException("Existe una constante realizando una operacion invalida");
-                }else{
-                    throw new EcuacionException("Caracter invalido");
-                }
-            }
+    public static boolean esValidoElParentesisDeCierre(String strAntecesor) throws EcuacionException{
+        char antecesor;
+    	if(strAntecesor.length() == 1) {
+    		antecesor = strAntecesor.charAt(0);
+	        if(antecesor > 0){
+	            if(!(esParentesisDeCierre(antecesor) ||
+	            		Variables.esUnaVariable(antecesor) ||
+	            		Constantes.esUnaConstante(antecesor))){
+	                if(Operadores.esUnOperador(antecesor)){
+	                    throw new OperadorException("Existe un operador realizando una operacion invalida");
+	                }else{
+	                    throw new EcuacionException("Caracter invalido");
+	                }
+	            }
+	        }
+        }else {
+        	if(ExpresionMatematica.esUnaExprecionMatematica(strAntecesor))
+        		throw new OperadorException("Expresion matematica mal posicionada");
         }
         return true;
     }
