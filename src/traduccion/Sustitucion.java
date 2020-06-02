@@ -20,7 +20,8 @@ public class Sustitucion {
         String tokenAnterior = null;
         
         
-        ListaCola<String> cola = new ListaCola<>();
+        ListaCola<String> colaNumeros = new ListaCola<>();
+        ListaCola<String> colaFunciones = new ListaCola<>();
         
         while(st.hasMoreTokens()){
             token = st.nextToken();
@@ -133,30 +134,61 @@ public class Sustitucion {
                                 if(!modulo.equals("")){
                                     if(modulo.contains("+")){
                                         modulo = "";
-                                        cola.push(token);
+                                        colaNumeros.push(token);
                                         sb.append("§");
                                     }else if(modulo.contains("-")){
                                         modulo += token;
-                                        cola.push(modulo);
+                                        colaNumeros.push(modulo);
                                         modulo = "";
                                         sb.append("§");
                                     }
                                 }else{
-                                    cola.push(token);
+                                    colaNumeros.push(token);
                                     sb.append("§");
                                 }
                             }else{
-                                cola.push(token);
+                                colaNumeros.push(token);
                                 sb.append("§");
                             }
                         }else{
                             sb.append(token);
                         }
                     }else{
-                        cola.push(token);
+                        colaNumeros.push(token);
                         sb.append("§");
                     }
                 } //IF TOKEN IS A CONSTANT
+                else if(ExpresionMatematica.esUnaExprecionMatematica(token)) {
+                	if(tokenAnterior != null) {
+                		if(tokenAnterior.length() == 1) {
+                			if(Operadores.esUnOperador(tokenAnterior.charAt(0))) {
+                				if(!modulo.equals("")) {
+                					if(modulo.contains("+")) {
+                						modulo = "";
+                						colaFunciones.push(token);
+                	                	sb.append("¤");
+                					}else if(modulo.contains("-")) {
+                						colaFunciones.push(token);
+                						sb.append("¶*¤");
+                                        modulo = "";
+                					}
+                				}else {
+                					colaFunciones.push(token);
+                					sb.append("¤");
+                				}
+                			}else {
+                				colaFunciones.push(token);
+                				sb.append("¤");
+                			}
+                		}else {
+                			colaFunciones.push(token);
+                			sb.append("¤");
+                		}
+                	}else {
+                		colaFunciones.push(token);
+                		sb.append("¤");
+                	}
+                }//IF TOKEN IS A MATHEMATIC EXPRESION
             } //IF TOKEN LENGTH IS 1
             else if(token.length() > 1){
                 try{
@@ -165,24 +197,56 @@ public class Sustitucion {
                     if(!modulo.equals("")){
                         if(modulo.contains("+")){
                             modulo = "";
-                            cola.push(token);
+                            colaNumeros.push(token);
                             sb.append("§");
                         }else if(modulo.contains("-")){
                             modulo += token;
-                            cola.push(modulo);
+                            colaNumeros.push(modulo);
                             modulo = "";
                             sb.append("§");
                         }
                     }else{
-                        cola.push(token);
+                        colaNumeros.push(token);
                         sb.append("§");
                     }
                 }catch(NumberFormatException nfE){
                     
                 }
+                
+                if(ExpresionMatematica.esUnaExprecionMatematica(token)) {
+                	if(tokenAnterior != null) {
+                		if(tokenAnterior.length() == 1) {
+                			if(Operadores.esUnOperador(tokenAnterior.charAt(0))) {
+                				if(!modulo.equals("")) {
+                					if(modulo.contains("+")) {
+                						modulo = "";
+                						colaFunciones.push(token);
+                	                	sb.append("¤");
+                					}else if(modulo.contains("-")) {
+                						colaFunciones.push(token);
+                						sb.append("¶*¤");
+                                        modulo = "";
+                					}
+                				}else {
+                					colaFunciones.push(token);
+                					sb.append("¤");
+                				}
+                			}else {
+                				colaFunciones.push(token);
+                				sb.append("¤");
+                			}
+                		}else {
+                			colaFunciones.push(token);
+                			sb.append("¤");
+                		}
+                	}else {
+                		colaFunciones.push(token);
+                		sb.append("¤");
+                	}
+                }
             } //IF TOKEN LENGTH IS BIGGER THAN 1
             tokenAnterior = token;
         } //FINAL CICLO WHILE
-        return new Object[]{sb.toString(), cola};
+        return new Object[]{sb.toString(), colaNumeros, colaFunciones};
     }
 }

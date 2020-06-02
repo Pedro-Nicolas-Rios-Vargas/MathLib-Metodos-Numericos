@@ -44,7 +44,7 @@ public class EcuacionesFijas {
                 }
                 */
                 
-            }else if(Operadores.esUnOperador(aux)){
+            }else if(Operadores.esUnOperador(aux) || aux == '¤'){
                 /*si ya existe un operador en la pila se entra en el if
                 
                 Si no existe un operador en la pila se agrega uno
@@ -52,9 +52,9 @@ public class EcuacionesFijas {
                 if(charOperador != 0){
                     /*  se compara el operador entrante con el ultimo almacenado
                         si el entrante tiene un valor menor en jerarquia al almacenado
-                        se sacara al de mayor jerarquia y sera aÃ±adida a la ecuacion transformada
+                        se sacara al de mayor jerarquia y sera añadida a la ecuacion transformada
                     
-                        Si no, si resulta ser que es mayor o igual al ya almacenado se aÃ±adira a la pila y
+                        Si no, si resulta ser que es mayor o igual al ya almacenado se añadira a la pila y
                         remplazara el valor de operador mas grande ingresado.
                     */
                     if(Operadores.operadorMenor(aux, charOperador)){
@@ -101,7 +101,7 @@ public class EcuacionesFijas {
         while (pila.getPointer() > 0) {            
             popped = (Character) pila.pop();
             pila.imprimirPila();
-            if(Operadores.esUnOperador(popped)){
+            if(Operadores.esUnOperador(popped) || popped == '¤'){
                 epos.append(popped);
             }
         }

@@ -181,6 +181,7 @@ public class Principal {
 					case 4:
 						menuFunTrigonometricas();
 						break;
+//BISECCION
 					case 5:
 						double biseccion;
 						double x1, x2;
@@ -217,7 +218,7 @@ public class Principal {
 			                    resultado = postFija.postFija(in);
 			                    System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
 			                    
-			                    Funcion fdex = new Funcion(resultado, (ListaCola) array[1]);
+			                    Funcion fdex = new Funcion(resultado, (ListaCola) array[1], (ListaCola) array[2]);
 			                    arbol = fdex.postFijaaArbol();
 			                    double res = fdex.ArbolaFuncion(arbol, 1);
 			                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);

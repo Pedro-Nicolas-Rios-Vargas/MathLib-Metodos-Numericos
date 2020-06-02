@@ -69,7 +69,9 @@ public class Operadores {
         if(operador == 42 || operador == 47)
             return 2;
         //retorna el valor del maximo exponente en la jerarquia de los operadores que seria la potencia o ^
-        return 3;
+        if(operador == 94)
+        	return 3;
+        return 4; //si es el simbolo ¤ significa que es una funcion matematica, lo que significa que es el maximo exponente  
     }
     
 }

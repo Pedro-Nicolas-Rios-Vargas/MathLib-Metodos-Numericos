@@ -16,11 +16,13 @@ import src.MathLib;
 public class Funcion {
     
     private String ecuacionPostFija;
-    private ListaCola<String> cola;
+    private ListaCola<String> colaConstantes;
+    private ListaCola<String> colaFunciones;
     
-    public Funcion(String ecuacionPostFija, ListaCola<String> colaConstantes){
+    public Funcion(String ecuacionPostFija, ListaCola<String> colaConstantes, ListaCola<String> colaFunciones){
         this.ecuacionPostFija = ecuacionPostFija;
-        this.cola = colaConstantes;
+        this.colaConstantes = colaConstantes;
+        this.colaFunciones = colaFunciones;
     }
     
     public Hijo postFijaaArbol(){
@@ -30,9 +32,9 @@ public class Funcion {
         double constante;
         for(int i = 0; i < ecuacionPostFija.length(); i++){
             caracter = ecuacionPostFija.charAt(i);
-            //245 = Â§ = CONSTANTE 244 = Â¶ = -1
+            //245 = Â§ = CONSTANTE 244 = Â¶ = -1 207 = ¤ = EXPRESION MATEMATICA
             if(caracter == '§'){
-                constante = Double.parseDouble(cola.pop());
+                constante = Double.parseDouble(colaConstantes.pop());
                 pila.push(constante);
             }else if(caracter == '¶'){
                 pila.push(-1d);
