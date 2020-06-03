@@ -66,6 +66,8 @@ public class Sustitucion {
                             if(Operadores.esUnOperador(tokenAnterior.charAt(0)) ||
                             		Parentesis.esParentesisDeApertura(tokenAnterior.charAt(0))){
                                 modulo += token;
+                            }else if(ExpresionMatematica.esUnaExprecionMatematica(tokenAnterior)) {
+                            	
                             }else{
                                 sb.append(token);
                             }

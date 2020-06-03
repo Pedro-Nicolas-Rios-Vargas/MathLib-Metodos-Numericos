@@ -91,7 +91,7 @@ public class Principal {
 					math = new MathLib(cifrasSignificativas);
 					//SACAR LA RAIZ DE UN VALOR X
 					try {
-					raiz = math.raizCuadrada(valor);
+					raiz = math.raizCuadrada(valor, true);
 
 					System.out.printf("\nLa raiz de: \"%f\" es: %f\n\n", valor, raiz);
 					}catch(MathLibException mlE) {
@@ -133,7 +133,7 @@ public class Principal {
 					}
 					
 					math = new MathLib(cifrasSignificativas);
-					euler = math.eulerElevado(valor);
+					euler = math.eulerElevado(valor, true);
 					System.out.printf("\nEuler Elevado al valor \"%f\" es: %f\n\n", valor, euler);
 					break;
 //FUNCION Ln
@@ -170,7 +170,7 @@ public class Principal {
 					}
 					math = new MathLib(cifrasSignificativas);
 					try {
-						ln = math.ln(valor);
+						ln = math.ln(valor, true);
 						System.out.printf("\nLogaritmo neperiano de \"%f\" es: %f\n\n", valor, ln);
 					}catch(MathLibException mlE) {
 						System.out.println("\n" + mlE.getMessage() + "\n");
@@ -187,10 +187,30 @@ public class Principal {
 						double x1, x2;
 						String resultado;
 						boolean validacion = false;
+						String ecuacion;
 						
 						Hijo arbol;
 						
 						System.out.println("FUNCION \"Raiz mas pequeña de una Funcion f(x)");
+						
+						while(true) {
+							System.out.print("De cuanto quiere que sea la cifra Significativa? ");
+							in = BR.readLine();
+							try {
+								cifrasSignificativas = Integer.parseInt(in);
+								if(cifrasSignificativas < 0)
+									throw new MathLibException("SYNTAX ERROR: Cifras Significativas no pueden ser negativas");
+								
+								break;
+							}catch(MathLibException mlE) {
+								System.out.println("\n" + mlE.getMessage() +"\n");
+							}catch(NumberFormatException nfE) {
+								System.out.println("\nValor de Ingreso no valido. Favor de ingreso un valor numerico positivo.\n");
+								continue;
+							}
+						} //FINAL WHILE INGRESO DE CIFRA SIGNIFICATIVA
+						math = new MathLib(cifrasSignificativas, "D");
+						
 						while(true) {
 							System.out.print("Ingrese la ecuacion: ");
 							in = BR.readLine();
@@ -202,13 +222,13 @@ public class Principal {
 			                    System.out.printf("La ecuacion %s no es valida \n\n", in);
 			                    continue;
 			                }else{
-			                    System.out.printf("La ecuacion %s es valida \n\n", in);
+			                    System.out.printf("\n\"La ecuacion %s es valida\" \n\n", in);
 			                    
 			                    Sustitucion sustituto = new Sustitucion(in);
 			                    Object[] array = sustituto.convertir();
-			                    System.out.printf("\n\n %s \n\n", array[0]);
+			                    //System.out.printf("\n\n %s \n\n", array[0]);
 			                    
-			                    String ecuacion = in;
+			                    ecuacion = in;
 			                    in = array[0].toString();
 			                    
 			                //ENVIO DE LA ECUACION DESPUES DE EVALUACION
@@ -216,12 +236,14 @@ public class Principal {
 			                    EcuacionesFijas postFija = new EcuacionesFijas();
 			                    
 			                    resultado = postFija.postFija(in);
-			                    System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
+			                    //System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
 			                    
 			                    Funcion fdex = new Funcion(resultado, (ListaCola) array[1], (ListaCola) array[2]);
 			                    arbol = fdex.postFijaaArbol();
-			                    double res = fdex.ArbolaFuncion(arbol, 1);
+			                    /*
+			                    double res = fdex.ArbolaFuncion(arbol, 1, math);
 			                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);
+			                     */
 			                    break;
 			                }
 						} //FINAL WHILE INGRESO DE FUNCION
@@ -248,26 +270,11 @@ public class Principal {
 							}
 						} //FINAL WHILE INGRESO DE LIMITE SUPERIOR
 						
-						while(true) {
-							System.out.print("De cuanto quiere que sea la cifra Significativa? ");
-							in = BR.readLine();
-							try {
-								cifrasSignificativas = Integer.parseInt(in);
-								if(cifrasSignificativas < 0)
-									throw new MathLibException("SYNTAX ERROR: Cifras Significativas no pueden ser negativas");
-								
-								break;
-							}catch(MathLibException mlE) {
-								System.out.println("\n" + mlE.getMessage() +"\n");
-							}catch(NumberFormatException nfE) {
-								System.out.println("\nValor de Ingreso no valido. Favor de ingreso un valor numerico positivo.\n");
-								continue;
-							}
-						} //FINAL WHILE INGRESO DE CIFRA SIGNIFICATIVA
-						math = new MathLib(cifrasSignificativas);
+						
 						try {
+							math.setFuncion(arbol);
 							biseccion = math.raizBiseccion(x1, x2);
-							System.out.printf("\nRaiz minima de la funcion \"(9.8/16) * (1 - e^-(16/x)*8 - 32\" con limite inferior \"%f\" y superior \"%f\" es: %.9f\n\n", x1, x2, biseccion);
+							System.out.printf("\nRaiz minima de la funcion \"%s\" con limite inferior \"%f\" y superior \"%f\" es: %.9f\n\n", ecuacion, x1, x2, biseccion);
 						}catch(MathLibException mlE) {
 							System.out.println("\n" + mlE.getMessage() + "\n");
 						}
@@ -347,7 +354,7 @@ public class Principal {
 						}
 					}
 					math = new MathLib(cifrasSignificativas, unidadDeAngulo);
-					sin = math.sin(valor);
+					sin = math.sin(valor, true);
 					System.out.printf("El valor seno de \"%f\" en %s es : %f \n\n", valor, (unidadDeAngulo.equals("R")) ? "RADIANES" : "GRADOS", sin);
 					break;
 //FUNCION COSENO
@@ -383,7 +390,7 @@ public class Principal {
 						}
 					}
 					math = new MathLib(cifrasSignificativas, unidadDeAngulo);
-					cos = math.cos(valor);
+					cos = math.cos(valor, true);
 					System.out.printf("El valor coseno de \"%f\" en %s es : %f \n\n", valor, (unidadDeAngulo.equals("R")) ? "RADIANES" : "GRADOS", cos);
 					break;
 //FUNCION TANGENTE
@@ -419,7 +426,7 @@ public class Principal {
 						}
 					}
 					math = new MathLib(cifrasSignificativas, unidadDeAngulo);
-					tan = math.tan(valor);
+					tan = math.tan(valor, true);
 					System.out.printf("El valor tangente de \"%f\" en %s es : %f \n\n", valor, (unidadDeAngulo.equals("R")) ? "RADIANES" : "GRADOS", tan);
 					break;
 //SALIR DEL MENU

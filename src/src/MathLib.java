@@ -7,6 +7,7 @@ import traduccion.Funcion;
 public class MathLib extends MetodosNumericos{
 	
 	public final double PI = pi();
+	public final double E = eulerElevado(1, false);
 	private String unidadAngular;
 	private Hijo funcion;
 	
@@ -70,18 +71,20 @@ public class MathLib extends MetodosNumericos{
 		return factor * factorial(factor-1);
 	}
 	
-	public double raizCuadrada(float valor) throws MathLibException {
-		if(valor < 0)
+	public double raizCuadrada(double d, boolean imprimir) throws MathLibException {
+		if(d < 0)
 			throw new MathLibException("SYNTAX ERROR: No se puede sacar raiz a un numero negativo");
 		double xi = 1, xiPlusOne;
 		double errorAproximado;
 		double errorMeta = errorMeta(cifrasSignificativas);
 		int iteracion = 0;
-		System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er \n");
+		if(imprimir)
+			System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er \n");
 		while(true) {
-			xiPlusOne = (1/2f) * (xi + (valor/xi));
+			xiPlusOne = (1/2f) * (xi + (d/xi));
 			errorAproximado = errorAproximado(xiPlusOne, xi);
-			System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
+			if(imprimir)
+				System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
 			iteracion++;
 			xi = xiPlusOne;
 			if(errorAproximado < errorMeta) {
@@ -92,19 +95,21 @@ public class MathLib extends MetodosNumericos{
 	}
 	
 //FUNCIONES EXPONENCIALES
-	public double eulerElevado(double potencia) {
+	public double eulerElevado(double potencia, boolean imprimir) {
 		double xi = 0, xiPlusOne;
 		double errorAproximado;
 		double errorMeta = errorMeta(cifrasSignificativas);
 		int iteracion = 0;
-		System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er \n");
+		if(imprimir)
+			System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er \n");
 		while (true) {
 			xiPlusOne = xi + (potencia(potencia, iteracion) / factorial(iteracion));
 			
 			errorAproximado = errorAproximado(xiPlusOne, xi);
 			if(errorAproximado < 0)
 				errorAproximado *= -1;
-			System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
+			if(imprimir)
+				System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
 			iteracion++;
 			xi = xiPlusOne;
 			if(errorAproximado < errorMeta) {
@@ -115,7 +120,7 @@ public class MathLib extends MetodosNumericos{
 		return xiPlusOne;
 	}
 	
-	public double ln(double valor) throws MathLibException{
+	public double ln(double valor, boolean imprimir) throws MathLibException{
 		if(valor == 0) {
 			throw new MathLibException("SYNTAX ERROR: Logaritmo de 0 no es determinado");
 		}else if(valor < 0) {
@@ -125,12 +130,14 @@ public class MathLib extends MetodosNumericos{
 		double errorAproximado;
 		double errorMeta = errorMeta(cifrasSignificativas);
 		int iteracion = 0;
-		System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er \n");
+		if(imprimir)
+			System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er \n");
 		while(true) {
 			xiPlusOne = xi + (1/((2f * iteracion) + 1)) * potencia(((valor - 1)/(valor + 1)), (2 * iteracion) + 1);
 			
 			errorAproximado = errorAproximado(xiPlusOne, xi);
-			System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
+			if(imprimir)
+				System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
 			iteracion++;
 			xi = xiPlusOne;
 			if(errorAproximado < errorMeta)
@@ -141,7 +148,7 @@ public class MathLib extends MetodosNumericos{
 //FINAL FUNCIONES EXPONENCIALES
 	
 //FUNCIONES TRIGONOMETRICAS
-	public double sin(double valor) {
+	public double sin(double valor, boolean imprimir) {
 		boolean mayoraPI = false; 
 		if(unidadAngular.equals("D")) {
 			if(valor >= 360) {
@@ -170,7 +177,8 @@ public class MathLib extends MetodosNumericos{
 		double errorAproximado;
 		double errorMeta = errorMeta(cifrasSignificativas);
 		int iteracion = 0;
-		System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er\n");
+		if(imprimir)
+			System.out.print("Iteracion\t xi \t\t xi+1 \t\t Er\n");
 		while(true) {
 			xiPlusOne = xi + (potencia(-1, iteracion)/factorial((2 * iteracion) + 1)) * potencia(valor, (2 * iteracion) +1);
 			
@@ -178,7 +186,8 @@ public class MathLib extends MetodosNumericos{
 			if(errorAproximado < 0) {
 				errorAproximado *= -1;
 			}
-			System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
+			if(imprimir)
+				System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
 			iteracion++;
 			xi = xiPlusOne;
 			if(errorAproximado < errorMeta)
@@ -190,7 +199,7 @@ public class MathLib extends MetodosNumericos{
 		return xiPlusOne;
 	} //FINAL FUNCION SENO
 	
-	public double cos(double valor) {
+	public double cos(double valor, boolean imprimir) {
 		boolean mayoraPI = false;
 		
 		if(unidadAngular.equals("D")) {
@@ -230,7 +239,8 @@ public class MathLib extends MetodosNumericos{
 		double errorAproximado;
 		double errorMeta = errorMeta(cifrasSignificativas);
 		int iteracion = 0;
-		System.out.println("Iteracion\t xi \t\t xi+1 \t\t Er\n");
+		if(imprimir)
+			System.out.println("Iteracion\t xi \t\t xi+1 \t\t Er\n");
 		while(true) {
 			xiPlusOne = xi + ((potencia(-1, iteracion) / factorial(2 * iteracion)) * potencia(valor, (2 * iteracion)));
 			
@@ -238,7 +248,8 @@ public class MathLib extends MetodosNumericos{
 			if(errorAproximado < 0) {
 				errorAproximado *= -1;
 			}
-			System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
+			if(imprimir)
+				System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \n", iteracion, xi, xiPlusOne, errorAproximado);
 			iteracion++;
 			xi = xiPlusOne;
 			if(errorAproximado < errorMeta)
@@ -250,8 +261,8 @@ public class MathLib extends MetodosNumericos{
 		return xiPlusOne;
 	} //FINAL FUNCION COSENO
 	
-	public double tan(double valor) {
-		double tangente = sin(valor) / cos(valor);
+	public double tan(double valor, boolean imprimir) {
+		double tangente = sin(valor, imprimir) / cos(valor, imprimir);
 		if(tangente == 0) {
 			tangente *= -1;
 		}
@@ -313,8 +324,13 @@ public class MathLib extends MetodosNumericos{
 	/*
 		return (((9.8 * x) / 16) * (1 - eulerElevado(-(16/x) * 8))) - 32;
 	*/
-		return Funcion.ArbolaFuncion(funcion, x);
+		return Funcion.ArbolaFuncion(funcion, x, this);
 	}
+	
+	public void setFuncion(Hijo funcion) {
+		this.funcion = funcion;
+	}
+	
 	private double pi() {
 		double xi = 0, xiPlusOne;
 		double errorAproximado;

@@ -37,7 +37,7 @@ public class EcuacionesFijas {
             }
             if(Parentesis.esParentesisDeApertura(aux)){
                 pila.push(aux);
-                pila.imprimirPila();
+                //pila.imprimirPila();
                 /*
                 if(charOperador != 0){
                     charOperador = 0;
@@ -63,16 +63,16 @@ public class EcuacionesFijas {
                         
                         charOperador = aux;
                         pila.push(aux);
-                        pila.imprimirPila();
+                        //pila.imprimirPila();
                     }else{
                         pila.push(aux);
                         charOperador = aux;
-                        pila.imprimirPila();
+                        //pila.imprimirPila();
                     }
                 }else{
                     charOperador = aux;
                     pila.push(aux);
-                    pila.imprimirPila();
+                    //pila.imprimirPila();
                 }
                 
             }else if(Parentesis.esParentesisDeCierre(aux)){
@@ -83,9 +83,9 @@ public class EcuacionesFijas {
                 */
                 do{
                     popped = (Character) pila.pop();
-                    pila.imprimirPila();
+                    //pila.imprimirPila();
                     
-                    if(Operadores.esUnOperador(popped)){
+                    if(Operadores.esUnOperador(popped) || popped == '¤'){
                         epos.append(popped);
                     }
                 }while(!Parentesis.esParentesisDeApertura(popped));
@@ -100,7 +100,7 @@ public class EcuacionesFijas {
         
         while (pila.getPointer() > 0) {            
             popped = (Character) pila.pop();
-            pila.imprimirPila();
+            //pila.imprimirPila();
             if(Operadores.esUnOperador(popped) || popped == '¤'){
                 epos.append(popped);
             }
