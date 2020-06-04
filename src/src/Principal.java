@@ -43,7 +43,7 @@ public class Principal {
 			System.out.println("[2] e^x");
 			System.out.println("[3] Logaritmo Neperiano");
 			System.out.println("[4] Funciones Trigonometricas");
-			System.out.println("[5] Metodo de Biseccion");
+			System.out.println("[5] Funciones para Raices de Funciones");
 			System.out.println("[6] Salir");
 			System.out.print("Que desea realizar? ");
 			entrada = BR.readLine();
@@ -181,115 +181,372 @@ public class Principal {
 					case 4:
 						menuFunTrigonometricas();
 						break;
-//BISECCION
 					case 5:
-						double biseccion;
-						double x1, x2;
-						String resultado;
-						boolean validacion = false;
-						String ecuacion;
-						
-						Hijo arbol;
-						
-						System.out.println("FUNCION \"Raiz mas peque�a de una Funcion f(x)");
-						
-						while(true) {
-							System.out.print("De cuanto quiere que sea la cifra Significativa? ");
-							in = BR.readLine();
-							try {
-								cifrasSignificativas = Integer.parseInt(in);
-								if(cifrasSignificativas < 0)
-									throw new MathLibException("SYNTAX ERROR: Cifras Significativas no pueden ser negativas");
-								
-								break;
-							}catch(MathLibException mlE) {
-								System.out.println("\n" + mlE.getMessage() +"\n");
-							}catch(NumberFormatException nfE) {
-								System.out.println("\nValor de Ingreso no valido. Favor de ingreso un valor numerico positivo.\n");
-								continue;
-							}
-						} //FINAL WHILE INGRESO DE CIFRA SIGNIFICATIVA
-						math = new MathLib(cifrasSignificativas, "D");
-						
-						while(true) {
-							System.out.print("Ingrese la ecuacion: ");
-							in = BR.readLine();
-							Ecuacion ecu = new Ecuacion(in);
-							
-							validacion = ecu.esEcuacion();
-							
-							if(!validacion){
-			                    System.out.printf("La ecuacion %s no es valida \n\n", in);
-			                    continue;
-			                }else{
-			                    System.out.printf("\n\"La ecuacion %s es valida\" \n\n", in);
-			                    
-			                    Sustitucion sustituto = new Sustitucion(in);
-			                    Object[] array = sustituto.convertir();
-			                    //System.out.printf("\n\n %s \n\n", array[0]);
-			                    
-			                    ecuacion = in;
-			                    in = array[0].toString();
-			                    
-			                //ENVIO DE LA ECUACION DESPUES DE EVALUACION
-			                
-			                    EcuacionesFijas postFija = new EcuacionesFijas();
-			                    
-			                    resultado = postFija.postFija(in);
-			                    //System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
-			                    
-			                    Funcion fdex = new Funcion(resultado, (ListaCola) array[1], (ListaCola) array[2]);
-			                    arbol = fdex.postFijaaArbol();
-			                    /*
-			                    double res = fdex.ArbolaFuncion(arbol, 1, math);
-			                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);
-			                     */
-			                    break;
-			                }
-						} //FINAL WHILE INGRESO DE FUNCION
-						while(true) {
-							System.out.print("Ingrese el limite inferior: ");
-							in = BR.readLine();
-							try {
-								x1 = Float.parseFloat(in);
-								break;
-							}catch(NumberFormatException mfE) {
-								System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
-								continue;
-							}
-						} //FINAL WHILE INGRESO DE LIMITE INFERIOR
-						while(true) {
-							System.out.print("Ingrese el limite superior: ");
-							in = BR.readLine();
-							try {
-								x2 = Float.parseFloat(in);
-								break;
-							}catch(NumberFormatException mfE) {
-								System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
-								continue;
-							}
-						} //FINAL WHILE INGRESO DE LIMITE SUPERIOR
-						
-						
-						try {
-							math.setFuncion(arbol);
-							biseccion = math.raizBiseccion(x1, x2);
-							System.out.printf("\nRaiz minima de la funcion \"%s\" con limite inferior \"%f\" y superior \"%f\" es: %.9f\n\n", ecuacion, x1, x2, biseccion);
-						}catch(MathLibException mlE) {
-							System.out.println("\n" + mlE.getMessage() + "\n");
-						}
+						menuFuncionesRaicesDeFunciones();
 						break;
 //SALIR
-				case 6:
+					case 6:
+						isDone = true;
+						break;
+					default:
+						System.out.println("\nOpcion no valida\n");
+						break;
+			} //FINAL SWITCH
+			
+		} //FINAL WHILE MENU
+	} //FINAL METODO MENU
+	
+	public static void menuFuncionesRaicesDeFunciones() throws IOException {
+		MathLib math;
+		float valor;
+		String in;
+		int cifrasSignificativas;
+		
+		boolean isDone = false;
+		String entrada;
+		int opc;
+		
+		while(!isDone) {
+			System.out.printf("FUNCIONES RAICES DE FUNCIONES\n");
+			System.out.println("[1] Metodo Biseccion");
+			System.out.println("[2] Metodo Incrementos");
+			System.out.println("[3] Metodo Newton-Raphson");
+			System.out.println("[4] Salir");
+			System.out.print("Que desea realizar? ");
+			entrada = BR.readLine();
+			if(validacionEntradaMenu(entrada) == 0)
+				continue;
+			opc = Integer.parseInt(entrada);
+			
+			switch(opc) {
+//BISECCION
+				case 1:
+					double biseccion;
+					double x1, x2;
+					String resultado;
+					boolean validacion = false;
+					String ecuacion;
+					
+					Hijo arbol;
+					
+					System.out.println("FUNCION \"Raiz mas pequeña de una Funcion f(x)");
+					
+					while(true) {
+						System.out.print("De cuanto quiere que sea la cifra Significativa? ");
+						in = BR.readLine();
+						try {
+							cifrasSignificativas = Integer.parseInt(in);
+							if(cifrasSignificativas < 0)
+								throw new MathLibException("SYNTAX ERROR: Cifras Significativas no pueden ser negativas");
+							
+							break;
+						}catch(MathLibException mlE) {
+							System.out.println("\n" + mlE.getMessage() +"\n");
+						}catch(NumberFormatException nfE) {
+							System.out.println("\nValor de Ingreso no valido. Favor de ingreso un valor numerico positivo.\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE CIFRA SIGNIFICATIVA
+					math = new MathLib(cifrasSignificativas, "D");
+					
+					while(true) {
+						System.out.print("Ingrese la ecuacion: ");
+						in = BR.readLine();
+						Ecuacion ecu = new Ecuacion(in);
+						
+						validacion = ecu.esEcuacion();
+						
+						if(!validacion){
+		                    System.out.printf("La ecuacion %s no es valida \n\n", in);
+		                    continue;
+		                }else{
+		                    System.out.printf("\n\"La ecuacion %s es valida\" \n\n", in);
+		                    
+		                    Sustitucion sustituto = new Sustitucion(in);
+		                    Object[] array = sustituto.convertir();
+		                    //System.out.printf("\n\n %s \n\n", array[0]);
+		                    
+		                    ecuacion = in;
+		                    in = array[0].toString();
+		                    
+		                //ENVIO DE LA ECUACION DESPUES DE EVALUACION
+		                
+		                    EcuacionesFijas postFija = new EcuacionesFijas();
+		                    
+		                    resultado = postFija.postFija(in);
+		                    //System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
+		                    
+		                    Funcion fdex = new Funcion(resultado, (ListaCola) array[1], (ListaCola) array[2]);
+		                    arbol = fdex.postFijaaArbol();
+		                    /*
+		                    double res = fdex.ArbolaFuncion(arbol, 1, math);
+		                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);
+		                     */
+		                    break;
+		                }
+					} //FINAL WHILE INGRESO DE FUNCION
+					while(true) {
+						System.out.print("Ingrese el limite inferior: ");
+						in = BR.readLine();
+						try {
+							x1 = Float.parseFloat(in);
+							break;
+						}catch(NumberFormatException mfE) {
+							System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE LIMITE INFERIOR
+					while(true) {
+						System.out.print("Ingrese el limite superior: ");
+						in = BR.readLine();
+						try {
+							x2 = Float.parseFloat(in);
+							break;
+						}catch(NumberFormatException mfE) {
+							System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE LIMITE SUPERIOR
+					
+					
+					try {
+						math.setFuncion(arbol);
+						biseccion = math.raizBiseccion(x1, x2);
+						System.out.printf("\nRaiz minima de la funcion \"%s\" con limite inferior \"%f\" y superior \"%f\" es: %.9f\n\n", ecuacion, x1, x2, biseccion);
+					}catch(MathLibException mlE) {
+						System.out.println("\n" + mlE.getMessage() + "\n");
+					}
+					break;
+//FUNCION METODO INCREMENTOS
+				case 2:
+					double incremento;
+					double xi, deltaX;
+					int q;
+					String resPostFija;
+					
+					Hijo funcionAIncremento;
+					
+					System.out.println("FUNCION \"Metodo incrementos");
+					
+					while(true) {
+						System.out.print("De cuanto quiere que sea la cifra Significativa? ");
+						in = BR.readLine();
+						try {
+							cifrasSignificativas = Integer.parseInt(in);
+							if(cifrasSignificativas < 0)
+								throw new MathLibException("SYNTAX ERROR: Cifras Significativas no pueden ser negativas");
+							
+							break;
+						}catch(MathLibException mlE) {
+							System.out.println("\n" + mlE.getMessage() +"\n");
+						}catch(NumberFormatException nfE) {
+							System.out.println("\nValor de Ingreso no valido. Favor de ingreso un valor numerico positivo.\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE CIFRA SIGNIFICATIVA
+					math = new MathLib(cifrasSignificativas, "D");
+					
+					while(true) {
+						System.out.print("Ingrese la ecuacion: ");
+						in = BR.readLine();
+						Ecuacion ecu = new Ecuacion(in);
+						
+						validacion = ecu.esEcuacion();
+						
+						if(!validacion){
+		                    System.out.printf("La ecuacion %s no es valida \n\n", in);
+		                    continue;
+		                }else{
+		                    System.out.printf("\n\"La ecuacion %s es valida\" \n\n", in);
+		                    
+		                    Sustitucion sustituto = new Sustitucion(in);
+		                    Object[] array = sustituto.convertir();
+		                    //System.out.printf("\n\n %s \n\n", array[0]);
+		                    
+		                    ecuacion = in;
+		                    in = array[0].toString();
+		                    
+		                //ENVIO DE LA ECUACION DESPUES DE EVALUACION
+		                
+		                    EcuacionesFijas postFija = new EcuacionesFijas();
+		                    
+		                    resPostFija = postFija.postFija(in);
+		                    //System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
+		                    
+		                    Funcion fdex = new Funcion(resPostFija, (ListaCola) array[1], (ListaCola) array[2]);
+		                    funcionAIncremento = fdex.postFijaaArbol();
+		                    
+		                    double res = fdex.ArbolaFuncion(funcionAIncremento, 0, math);
+		                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);
+		                    
+		                    break;
+		                }
+					} //FINAL WHILE INGRESO DE FUNCION
+					while(true) {
+						System.out.print("Ingrese el incremento de cada bloque (Δx): ");
+						in = BR.readLine();
+						try {
+							deltaX = Float.parseFloat(in);
+							break;
+						}catch(NumberFormatException mfE) {
+							System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE LIMITE INFERIOR
+					while(true) {
+						System.out.print("Ingrese el valor inicial x0: ");
+						in = BR.readLine();
+						try {
+							xi = Float.parseFloat(in);
+							break;
+						}catch(NumberFormatException mfE) {
+							System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE LIMITE SUPERIOR
+					while(true) {
+						System.out.print("Ingrese el valor q: ");
+						in = BR.readLine();
+						try {
+							q = Integer.parseInt(in);
+							break;
+						}catch(NumberFormatException mfE) {
+							System.out.println("\nValor de ingreso no valido. Favor de ingresar un valor numerico positivo\n");
+							continue;
+						}
+					}
+					
+					math.setFuncion(funcionAIncremento);
+					
+					incremento = math.incrementos(xi, deltaX, q);
+					
+					System.out.printf("\nRaiz minima de la funcion \"%s\" donde el punto inicial es %.5f y el tamaño de los bloques es %.5f es: %.9f\n\n", ecuacion, xi, deltaX, incremento);
+					
+					break;
+				case 3:
+					String ecuacionFx, ecuacionFxPrima;
+					Hijo funcionFdeX, funcionPrimaDeX;
+					
+					System.out.println("METDO NEWTON-RAPHSON\n");
+					while(true) {
+						System.out.print("De cuanto quiere que sea la cifra Significativa? ");
+						in = BR.readLine();
+						try {
+							cifrasSignificativas = Integer.parseInt(in);
+							if(cifrasSignificativas < 0)
+								throw new MathLibException("SYNTAX ERROR: Cifras Significativas no pueden ser negativas");
+							
+							break;
+						}catch(MathLibException mlE) {
+							System.out.println("\n" + mlE.getMessage() +"\n");
+						}catch(NumberFormatException nfE) {
+							System.out.println("\nValor de Ingreso no valido. Favor de ingreso un valor numerico positivo.\n");
+							continue;
+						}
+					} //FINAL WHILE INGRESO DE CIFRA SIGNIFICATIVA
+					
+					
+					math = new MathLib(cifrasSignificativas, "R");
+					
+					
+					while(true) {
+						System.out.print("Ingrese la ecuacion: ");
+						in = BR.readLine();
+						Ecuacion ecu = new Ecuacion(in);
+						
+						validacion = ecu.esEcuacion();
+						
+						if(!validacion){
+		                    System.out.printf("La ecuacion %s no es valida \n\n", in);
+		                    continue;
+		                }else{
+		                    System.out.printf("\n\"La ecuacion %s es valida\" \n\n", in);
+		                    
+		                    Sustitucion sustituto = new Sustitucion(in);
+		                    Object[] array = sustituto.convertir();
+		                    //System.out.printf("\n\n %s \n\n", array[0]);
+		                    
+		                    ecuacionFx = in;
+		                    in = array[0].toString();
+		                    
+		                //ENVIO DE LA ECUACION DESPUES DE EVALUACION
+		                
+		                    EcuacionesFijas postFija = new EcuacionesFijas();
+		                    
+		                    resPostFija = postFija.postFija(in);
+		                    //System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
+		                    
+		                    Funcion fdex = new Funcion(resPostFija, (ListaCola) array[1], (ListaCola) array[2]);
+		                    funcionFdeX = fdex.postFijaaArbol();
+		                    
+		                    double res = fdex.ArbolaFuncion(funcionFdeX, 0, math);
+		                    System.out.printf("El resultado de %s es: %f\n", ecuacionFx, res);
+		                    
+		                    break;
+		                }
+					} //FINAL WHILE INGRESO DE FUNCION
+					while(true) {
+						System.out.print("Ingrese la derivada de la ecuacion anterior: ");
+						in = BR.readLine();
+						Ecuacion ecu = new Ecuacion(in);
+						
+						validacion = ecu.esEcuacion();
+						
+						if(!validacion){
+		                    System.out.printf("La ecuacion %s no es valida \n\n", in);
+		                    continue;
+		                }else{
+		                    System.out.printf("\n\"La ecuacion %s es valida\" \n\n", in);
+		                    
+		                    Sustitucion sustituto = new Sustitucion(in);
+		                    Object[] array = sustituto.convertir();
+		                    //System.out.printf("\n\n %s \n\n", array[0]);
+		                    
+		                    ecuacionFxPrima = in;
+		                    in = array[0].toString();
+		                    
+		                //ENVIO DE LA ECUACION DESPUES DE EVALUACION
+		                
+		                    EcuacionesFijas postFija = new EcuacionesFijas();
+		                    
+		                    resPostFija = postFija.postFija(in);
+		                    //System.out.println("Ecuacion Postfija: "+resultado+"\n\n");
+		                    
+		                    Funcion fdex = new Funcion(resPostFija, (ListaCola) array[1], (ListaCola) array[2]);
+		                    funcionPrimaDeX = fdex.postFijaaArbol();
+		                    
+		                    double res = fdex.ArbolaFuncion(funcionPrimaDeX, 0, math);
+		                    System.out.printf("El resultado de %s es: %f\n", ecuacionFxPrima, res);
+		                    
+		                    break;
+		                }
+					} //FINAL WHILE INGRESO DE FUNCION
+					while(true) {
+						System.out.print("Ingrese el valor inicial de x1: ");
+						in = BR.readLine();
+						try {
+							xi = Double.parseDouble(in);
+							break;
+						}catch(NumberFormatException nfE) {
+							System.out.println("Valor no numerico, favor de ingresar un valor numerico.");
+						}
+						
+					}
+					math.setFuncion(funcionFdeX);
+					math.setFuncionDerivada(funcionPrimaDeX);
+					
+					double raiz = math.newtonRaphson(xi);
+					System.out.printf("\nLa raiz de la funcion \"%s\" es: %.5f\n", ecuacionFx, raiz);
+					break;
+				case 4:
 					isDone = true;
 					break;
 				default:
 					System.out.println("\nOpcion no valida\n");
 					break;
-			} //FINAL SWITCH
-			
-		} //FINAL WHILE MENU
-	} //FINAL METODO MENU
+			}
+		}
+	} //FINAL MENU FUNCIONES RAICES DE FUNCIONES
 	
 	public static void menuFunTrigonometricas() throws IOException {
 		MathLib math;

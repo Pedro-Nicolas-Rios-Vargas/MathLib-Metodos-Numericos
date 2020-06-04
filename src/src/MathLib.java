@@ -10,6 +10,7 @@ public class MathLib extends MetodosNumericos{
 	public final double E = eulerElevado(1, false);
 	private String unidadAngular;
 	private Hijo funcion;
+	private Hijo funcionDerivada;
 	
 	public MathLib(int cifrasSignificativas) {
 		super(cifrasSignificativas);
@@ -25,6 +26,12 @@ public class MathLib extends MetodosNumericos{
 	public MathLib(int cifrasSignificativas, Hijo funcion) {
 		super(cifrasSignificativas);
 		this.funcion = funcion;
+	}
+	
+	public MathLib(int cifrasSignificativas, Hijo funcion, Hijo funcionDerivada) {
+		super(cifrasSignificativas);
+		this.funcion = funcion;
+		this.funcionDerivada = funcionDerivada;
 	}
 	
 	public static double suma(double aSumar, double sumado) {
@@ -311,6 +318,67 @@ public class MathLib extends MetodosNumericos{
 		
 	} //FINAL METODO RAIZBISECCION
 	
+	public double incrementos(double xi, double deltaX, int q) {
+		double xiPlusOne;
+		double errorAproximado;
+		double fx, fxLessOne = 0;
+		double errorMeta = errorMeta(cifrasSignificativas);
+		int iteracion = 0;
+		System.out.println("Iteracion \t Δx \t\t xi \t\t f(xi) \t\t Ea\n");
+		while(true) {
+			fx = f(xi);
+			errorAproximado = errorAproximado(fx, fxLessOne);
+			if(errorAproximado < 0)
+				errorAproximado *= -1;
+			System.out.printf("%d \t\t %.5f \t %.5f \t%.5f \t %.5f\n", iteracion, deltaX, xi, fx, errorAproximado);
+			if(fx < 0) {
+				xi += deltaX;
+				fxLessOne = fx;
+			}else if(fx > 0) {
+				deltaX /= q;
+				xi = deltaX;
+			}
+			if(errorAproximado < errorMeta) {
+				break;
+			}
+			
+			
+			iteracion++;
+		}
+		return xi;
+		
+	}
+	
+	public double newtonRaphson(double xi) {
+		double xiPlusOne;
+		double fx;
+		double fxPrima;
+		double errorAproximado;
+		double errorMeta = errorMeta(cifrasSignificativas);
+		int iteracion = 0;
+		
+		System.out.println("Iteracion \t xi \t\t f(x) \t\t f'(x) \t\t xi+1 \t\t Ea");
+		while(true) {
+			fx = f(xi);
+			fxPrima = fPrima(xi);
+			xiPlusOne = xi - (fx/fxPrima);
+			errorAproximado = errorAproximado(xiPlusOne, xi);
+			if(errorAproximado < 0)
+				errorAproximado *= -1;
+			System.out.printf("%d\t\t %.5f \t %.5f \t %.5f \t %.5f \t %.5f\n", iteracion, xi, fx, fxPrima, xiPlusOne, errorAproximado);
+			
+			if(errorAproximado < errorMeta || fxPrima == 0) {
+				break;
+			}
+			
+			iteracion++;
+			xi = xiPlusOne;
+		}
+		
+		return xiPlusOne;
+		
+	}
+	
 	private double f(double x) {
 	/*
 		FUNCION DEL SALON EJERCICIO 
@@ -327,10 +395,17 @@ public class MathLib extends MetodosNumericos{
 		return Funcion.ArbolaFuncion(funcion, x, this);
 	}
 	
+	private double fPrima(double x) {
+		return Funcion.ArbolaFuncion(funcionDerivada, x, this);
+	}
+	
 	public void setFuncion(Hijo funcion) {
 		this.funcion = funcion;
 	}
 	
+	public void setFuncionDerivada(Hijo funcionDerivada) {
+		this.funcionDerivada = funcionDerivada;
+	}
 	private double pi() {
 		double xi = 0, xiPlusOne;
 		double errorAproximado;
