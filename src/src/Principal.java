@@ -229,7 +229,7 @@ public class Principal {
 					
 					Hijo arbol;
 					
-					System.out.println("FUNCION \"Raiz mas pequeña de una Funcion f(x)");
+					System.out.println("\n\n\t\"METODO DE BISECCION\"\n");
 					
 					while(true) {
 						System.out.print("De cuanto quiere que sea la cifra Significativa? ");
@@ -279,9 +279,9 @@ public class Principal {
 		                    Funcion fdex = new Funcion(resultado, (ListaCola) array[1], (ListaCola) array[2]);
 		                    arbol = fdex.postFijaaArbol();
 		                    /*
-		                    double res = fdex.ArbolaFuncion(arbol, 1, math);
+		                    double res = fdex.ArbolaFuncion(arbol, 50, math);
 		                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);
-		                     */
+		                    */
 		                    break;
 		                }
 					} //FINAL WHILE INGRESO DE FUNCION
@@ -326,7 +326,7 @@ public class Principal {
 					
 					Hijo funcionAIncremento;
 					
-					System.out.println("FUNCION \"Metodo incrementos");
+					System.out.println("\n\n\t\"METODO DE INCREMENTOS\"\n");
 					
 					while(true) {
 						System.out.print("De cuanto quiere que sea la cifra Significativa? ");
@@ -375,10 +375,10 @@ public class Principal {
 		                    
 		                    Funcion fdex = new Funcion(resPostFija, (ListaCola) array[1], (ListaCola) array[2]);
 		                    funcionAIncremento = fdex.postFijaaArbol();
-		                    
+		                    /*
 		                    double res = fdex.ArbolaFuncion(funcionAIncremento, 0, math);
 		                    System.out.printf("El resultado de %s es: %f\n", ecuacion, res);
-		                    
+		                    */
 		                    break;
 		                }
 					} //FINAL WHILE INGRESO DE FUNCION
@@ -427,7 +427,7 @@ public class Principal {
 					String ecuacionFx, ecuacionFxPrima;
 					Hijo funcionFdeX, funcionPrimaDeX;
 					
-					System.out.println("METDO NEWTON-RAPHSON\n");
+					System.out.println("\n\n\t\"METODO NEWTON-RAPHSON\"\n");
 					while(true) {
 						System.out.print("De cuanto quiere que sea la cifra Significativa? ");
 						in = BR.readLine();
@@ -478,10 +478,10 @@ public class Principal {
 		                    
 		                    Funcion fdex = new Funcion(resPostFija, (ListaCola) array[1], (ListaCola) array[2]);
 		                    funcionFdeX = fdex.postFijaaArbol();
-		                    
+		                    /*
 		                    double res = fdex.ArbolaFuncion(funcionFdeX, 0, math);
 		                    System.out.printf("El resultado de %s es: %f\n", ecuacionFx, res);
-		                    
+		                    */
 		                    break;
 		                }
 					} //FINAL WHILE INGRESO DE FUNCION
@@ -514,10 +514,10 @@ public class Principal {
 		                    
 		                    Funcion fdex = new Funcion(resPostFija, (ListaCola) array[1], (ListaCola) array[2]);
 		                    funcionPrimaDeX = fdex.postFijaaArbol();
-		                    
+		                    /*
 		                    double res = fdex.ArbolaFuncion(funcionPrimaDeX, 0, math);
 		                    System.out.printf("El resultado de %s es: %f\n", ecuacionFxPrima, res);
-		                    
+		                    */
 		                    break;
 		                }
 					} //FINAL WHILE INGRESO DE FUNCION

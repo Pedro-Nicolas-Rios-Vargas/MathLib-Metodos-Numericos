@@ -310,7 +310,7 @@ public class MathLib extends MetodosNumericos{
 				return xMPlusOne;
 			}
 			
-			if(errorAproximado < errorMeta || iteracion == 8)
+			if(errorAproximado < errorMeta)
 				return xMPlusOne;
 			xM = xMPlusOne;
 			iteracion++;
@@ -319,26 +319,30 @@ public class MathLib extends MetodosNumericos{
 	} //FINAL METODO RAIZBISECCION
 	
 	public double incrementos(double xi, double deltaX, int q) {
-		double xiPlusOne;
-		double errorAproximado;
+		double lastX = xi;
+		double errorAproximado = 1;
 		double fx, fxLessOne = 0;
 		double errorMeta = errorMeta(cifrasSignificativas);
 		int iteracion = 0;
-		System.out.println("Iteracion \t Δx \t\t xi \t\t f(xi) \t\t Ea\n");
+		System.out.println("Iteracion \t Δx \t\t xi \t\t f(xi)\n");
 		while(true) {
 			fx = f(xi);
-			errorAproximado = errorAproximado(fx, fxLessOne);
-			if(errorAproximado < 0)
-				errorAproximado *= -1;
-			System.out.printf("%d \t\t %.5f \t %.5f \t%.5f \t %.5f\n", iteracion, deltaX, xi, fx, errorAproximado);
 			if(fx < 0) {
+			
+				System.out.printf("%d \t\t %.5f \t %.5f \t%.5f\n", iteracion, deltaX, xi, fx);
+			}else {
+				System.out.printf("%d \t\t %.5f \t %.5f \t%s\n", iteracion, deltaX, xi, "   -");
+			}
+			if(fx < 0) {
+				lastX = xi;
 				xi += deltaX;
 				fxLessOne = fx;
+				
 			}else if(fx > 0) {
 				deltaX /= q;
-				xi = deltaX;
+				xi = lastX+deltaX;
 			}
-			if(errorAproximado < errorMeta) {
+			if(((fx < 0)? fx*-1 : fx) < errorMeta) {
 				break;
 			}
 			
